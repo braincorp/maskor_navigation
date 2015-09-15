@@ -44,16 +44,16 @@ UNICYCLE_MPRIMS = 0;
 
 
 if LINESEGMENT_MPRIMS == 1
-    resolution = 0.01;
-    numberofangles = 32; %preferably a power of 2, definitely multiple of 8
+    resolution = 0.05;
+    numberofangles = 16; %preferably a power of 2, definitely multiple of 8
     numberofprimsperangle = 16;
 
     %multipliers (multiplier is used as costmult*cost)
     forwardcostmult = 1;
-    backwardcostmult = 5;
+    backwardcostmult = 3;
     forwardandturncostmult = 1;
     sidestepcostmult = 50;
-    turninplacecostmult = 50;
+    turninplacecostmult = 2;
     
     %note, what is shown x,y,theta changes (not absolute numbers)
     

@@ -42,8 +42,8 @@ UNICYCLE_MPRIM_16DEGS = 1;
 
 if UNICYCLE_MPRIM_16DEGS == 1
     resolution = 0.05;
-    numberofangles = 32; %preferably a power of 2, definitely multiple of 8
-    numberofprimsperangle = 2;
+    numberofangles = 16; %preferably a power of 2, definitely multiple of 8
+    numberofprimsperangle = 4;
 
     %multipliers (multiplier is used as costmult*cost)
     forwardcostmult = 1;

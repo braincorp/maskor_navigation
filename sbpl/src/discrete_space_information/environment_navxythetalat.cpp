@@ -1280,10 +1280,10 @@ int EnvironmentNAVXYTHETALATTICE::GetActionCost(int SourceX, int SourceY, int So
             //check validity
             if (!IsValidCell(cell.x, cell.y)) return INFINITECOST;
 
-            //if(EnvNAVXYTHETALATCfg.Grid2D[cell.x][cell.y] > currentmaxcost)
+            if(EnvNAVXYTHETALATCfg.Grid2D[cell.x][cell.y] > maxcellcost)
             ////cost computation changed: cost = max(cost of centers of the
             //robot along action)
-            //	currentmaxcost = EnvNAVXYTHETALATCfg.Grid2D[cell.x][cell.y];
+            	maxcellcost = EnvNAVXYTHETALATCfg.Grid2D[cell.x][cell.y];
             //	//intersecting cells are only used for collision checking
         }
     }
@@ -2100,7 +2100,6 @@ int EnvironmentNAVXYTHETALAT::SetStart(double x_m, double y_m, double theta_rad)
 
     if (!IsValidConfiguration(x, y, theta)) {
         SBPL_ERROR("ERROR: start configuration %d %d %d is invalid (crashing against obstacles)\n", x, y, theta);
-        return -1;
     }
 
     EnvNAVXYTHETALATHashEntry_t* OutHashEntry;

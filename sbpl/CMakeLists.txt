@@ -136,7 +136,7 @@ configure_file(sbpl-config.cmake.in
 configure_file(sbpl-config-version.cmake.in
   "sbpl-config-version.cmake" @ONLY)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 ## Declare a cpp library
 # add_library(sbpl
 #   src/${PROJECT_NAME}/sbpl.cpp

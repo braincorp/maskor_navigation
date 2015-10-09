@@ -44,7 +44,7 @@
 //0 - is aligned with X-axis in the positive direction (1,0 in polar coordinates)
 //theta increases as we go counterclockwise
 //number of theta values - should be power of 2
-#define NAVXYTHETALAT_THETADIRS 16
+#define NAVXYTHETALAT_THETADIRS 32
 //number of actions per x,y,theta state
 //decrease, increase, same angle while moving plus decrease, increase angle while standing.
 #define NAVXYTHETALAT_DEFAULT_ACTIONWIDTH 5 
@@ -291,7 +291,9 @@ public:
                                double goaltol_x, double goaltol_y, double goaltol_theta,
                                const std::vector<sbpl_2Dpt_t>& perimeterptsV, double cellsize_m,
                                double nominalvel_mpersecs, double timetoturn45degsinplace_secs,
-                               unsigned char obsthresh, const char* sMotPrimFile);
+                               unsigned char obsthresh, const char* sMotPrimFile,
+                               bool use_full_footprint_cost,
+                               bool allow_start_collision);
 
     /**
      * \brief Same as the above InitializeEnv except that only the parameters
@@ -301,7 +303,8 @@ public:
      */
     virtual bool InitializeEnv(int width, int height, const std::vector<sbpl_2Dpt_t> & perimeterptsV, double cellsize_m,
                                double nominalvel_mpersecs, double timetoturn45degsinplace_secs,
-                               unsigned char obsthresh, const char* sMotPrimFile, EnvNAVXYTHETALAT_InitParms params);
+                               unsigned char obsthresh, bool use_full_footprint_cost, bool allow_start_collision,
+                               const char* sMotPrimFile, EnvNAVXYTHETALAT_InitParms params);
 
     /**
      * \brief update the traversability of a cell<x,y>
@@ -420,6 +423,14 @@ protected:
     std::vector<sbpl_xy_theta_cell_t> affectedsuccstatesV; //arrays of states whose outgoing actions cross cell 0,0
     std::vector<sbpl_xy_theta_cell_t> affectedpredstatesV; //arrays of states whose incoming actions cross cell 0,0
     int iteration;
+
+    // use_full_footprint_cost_==False means only the cost at the center of the robot
+    // is used to compute path cost; if True, the max cost in the whole footprint is used
+    bool use_full_footprint_cost_;
+
+    // allow_start_collision_==False means the planner will refuse to plan when the starting pose
+    // collides with obstacles; if True, it will only warn
+    bool allow_start_collision_;
 
     //2D search for heuristic computations
     bool bNeedtoRecomputeStartHeuristics; //set whenever grid2Dsearchfromstart needs to be re-executed

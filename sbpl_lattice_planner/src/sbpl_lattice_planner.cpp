@@ -102,8 +102,12 @@ void SBPLLatticePlanner::initialize(std::string name, costmap_2d::Costmap2DROS* 
     private_nh.param("force_scratch_limit",force_scratch_limit_,500);
 
     double nominalvel_mpersecs, timetoturn45degsinplace_secs;
+    bool use_full_footprint_cost;
+    bool allow_start_collision;
     private_nh.param("nominalvel_mpersecs", nominalvel_mpersecs, 0.4);
     private_nh.param("timetoturn45degsinplace_secs", timetoturn45degsinplace_secs, 0.6);
+    private_nh.param("use_full_footprint_cost", use_full_footprint_cost, bool(false));
+    private_nh.param("allow_start_collision", allow_start_collision, bool(false));
 
     int lethal_obstacle;
     private_nh.param("lethal_obstacle",lethal_obstacle,20);
@@ -133,8 +137,7 @@ void SBPLLatticePlanner::initialize(std::string name, costmap_2d::Costmap2DROS* 
         ++layer) {
       boost::shared_ptr<costmap_2d::InflationLayer> inflation_layer = boost::dynamic_pointer_cast<costmap_2d::InflationLayer>(*layer);
       if (!inflation_layer) continue;
-
-      cost_possibly_circumscribed_tresh = inflation_layer->computeCost(costmap_ros_->getLayeredCostmap()->getCircumscribedRadius());
+      cost_possibly_circumscribed_tresh = inflation_layer->computeCost(costmap_ros_->getLayeredCostmap()->getCircumscribedRadius() / costmap_ros_->getCostmap()->getResolution());
     }
 
     if(!env_->SetEnvParameter("cost_inscribed_thresh",costMapCostToSBPLCost(costmap_2d::INSCRIBED_INFLATED_OBSTACLE))){
@@ -165,7 +168,9 @@ void SBPLLatticePlanner::initialize(std::string name, costmap_2d::Costmap2DROS* 
                                 0, 0, 0, //goal tolerance
                                 perimeterptsV, costmap_ros_->getCostmap()->getResolution(), nominalvel_mpersecs,
                                 timetoturn45degsinplace_secs, obst_cost_thresh,
-                                primitive_filename_.c_str());
+                                primitive_filename_.c_str(),
+                                use_full_footprint_cost,
+                                allow_start_collision);
     }
     catch(SBPL_Exception e){
       ROS_ERROR("SBPL encountered a fatal exception!");

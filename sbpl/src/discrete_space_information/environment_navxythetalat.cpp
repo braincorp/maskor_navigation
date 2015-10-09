@@ -1280,7 +1280,7 @@ int EnvironmentNAVXYTHETALATTICE::GetActionCost(int SourceX, int SourceY, int So
             //check validity
             if (!IsValidCell(cell.x, cell.y)) return INFINITECOST;
 
-            if(EnvNAVXYTHETALATCfg.Grid2D[cell.x][cell.y] > maxcellcost)
+            if(use_full_footprint_cost_ && EnvNAVXYTHETALATCfg.Grid2D[cell.x][cell.y] > maxcellcost)
             ////cost computation changed: cost = max(cost of centers of the
             //robot along action)
             	maxcellcost = EnvNAVXYTHETALATCfg.Grid2D[cell.x][cell.y];
@@ -1588,6 +1588,7 @@ bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(const char* sEnvFile)
 bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const vector<sbpl_2Dpt_t> & perimeterptsV,
                                                  double cellsize_m, double nominalvel_mpersecs,
                                                  double timetoturn45degsinplace_secs, unsigned char obsthresh,
+                                                 bool use_full_footprint_cost,
                                                  const char* sMotPrimFile, EnvNAVXYTHETALAT_InitParms params)
 {
     EnvNAVXYTHETALATCfg.NumThetaDirs = params.numThetas;
@@ -1595,7 +1596,7 @@ bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const ve
     return InitializeEnv(width, height, params.mapdata, params.startx, params.starty, params.starttheta, params.goalx,
                          params.goaly, params.goaltheta, params.goaltol_x, params.goaltol_y, params.goaltol_theta,
                          perimeterptsV, cellsize_m, nominalvel_mpersecs, timetoturn45degsinplace_secs, obsthresh,
-                         sMotPrimFile);
+                         sMotPrimFile, use_full_footprint_cost);
 }
 
 bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const unsigned char* mapdata, double startx,
@@ -1604,7 +1605,8 @@ bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const un
                                                  double goaltol_theta, const vector<sbpl_2Dpt_t> & perimeterptsV,
                                                  double cellsize_m, double nominalvel_mpersecs,
                                                  double timetoturn45degsinplace_secs, unsigned char obsthresh,
-                                                 const char* sMotPrimFile)
+                                                 const char* sMotPrimFile,
+                                                 bool use_full_footprint_cost)
 {
     SBPL_PRINTF("env: initialize with width=%d height=%d start=%.3f %.3f %.3f "
                 "goalx=%.3f %.3f %.3f cellsize=%.3f nomvel=%.3f timetoturn=%.3f, obsthresh=%d\n",
@@ -1620,6 +1622,7 @@ bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const un
     }
 
     EnvNAVXYTHETALATCfg.obsthresh = obsthresh;
+    use_full_footprint_cost_ = use_full_footprint_cost;
 
     //TODO - need to set the tolerance as well
 

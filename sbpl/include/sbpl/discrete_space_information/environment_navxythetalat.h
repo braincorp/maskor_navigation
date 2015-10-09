@@ -291,7 +291,8 @@ public:
                                double goaltol_x, double goaltol_y, double goaltol_theta,
                                const std::vector<sbpl_2Dpt_t>& perimeterptsV, double cellsize_m,
                                double nominalvel_mpersecs, double timetoturn45degsinplace_secs,
-                               unsigned char obsthresh, const char* sMotPrimFile);
+                               unsigned char obsthresh, const char* sMotPrimFile,
+                               bool use_full_footprint_cost);
 
     /**
      * \brief Same as the above InitializeEnv except that only the parameters
@@ -301,7 +302,8 @@ public:
      */
     virtual bool InitializeEnv(int width, int height, const std::vector<sbpl_2Dpt_t> & perimeterptsV, double cellsize_m,
                                double nominalvel_mpersecs, double timetoturn45degsinplace_secs,
-                               unsigned char obsthresh, const char* sMotPrimFile, EnvNAVXYTHETALAT_InitParms params);
+                               unsigned char obsthresh, bool use_full_footprint_cost,
+                               const char* sMotPrimFile, EnvNAVXYTHETALAT_InitParms params);
 
     /**
      * \brief update the traversability of a cell<x,y>
@@ -420,6 +422,7 @@ protected:
     std::vector<sbpl_xy_theta_cell_t> affectedsuccstatesV; //arrays of states whose outgoing actions cross cell 0,0
     std::vector<sbpl_xy_theta_cell_t> affectedpredstatesV; //arrays of states whose incoming actions cross cell 0,0
     int iteration;
+    bool use_full_footprint_cost_;
 
     //2D search for heuristic computations
     bool bNeedtoRecomputeStartHeuristics; //set whenever grid2Dsearchfromstart needs to be re-executed

@@ -103,9 +103,11 @@ void SBPLLatticePlanner::initialize(std::string name, costmap_2d::Costmap2DROS* 
 
     double nominalvel_mpersecs, timetoturn45degsinplace_secs;
     bool use_full_footprint_cost;
+    bool allow_start_collision;
     private_nh.param("nominalvel_mpersecs", nominalvel_mpersecs, 0.4);
     private_nh.param("timetoturn45degsinplace_secs", timetoturn45degsinplace_secs, 0.6);
     private_nh.param("use_full_footprint_cost", use_full_footprint_cost, bool(false));
+    private_nh.param("allow_start_collision", allow_start_collision, bool(false));
 
     int lethal_obstacle;
     private_nh.param("lethal_obstacle",lethal_obstacle,20);
@@ -167,7 +169,8 @@ void SBPLLatticePlanner::initialize(std::string name, costmap_2d::Costmap2DROS* 
                                 perimeterptsV, costmap_ros_->getCostmap()->getResolution(), nominalvel_mpersecs,
                                 timetoturn45degsinplace_secs, obst_cost_thresh,
                                 primitive_filename_.c_str(),
-                                use_full_footprint_cost);
+                                use_full_footprint_cost,
+                                allow_start_collision);
     }
     catch(SBPL_Exception e){
       ROS_ERROR("SBPL encountered a fatal exception!");

@@ -1589,6 +1589,7 @@ bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const ve
                                                  double cellsize_m, double nominalvel_mpersecs,
                                                  double timetoturn45degsinplace_secs, unsigned char obsthresh,
                                                  bool use_full_footprint_cost,
+                                                 bool allow_start_collision,
                                                  const char* sMotPrimFile, EnvNAVXYTHETALAT_InitParms params)
 {
     EnvNAVXYTHETALATCfg.NumThetaDirs = params.numThetas;
@@ -1596,7 +1597,7 @@ bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const ve
     return InitializeEnv(width, height, params.mapdata, params.startx, params.starty, params.starttheta, params.goalx,
                          params.goaly, params.goaltheta, params.goaltol_x, params.goaltol_y, params.goaltol_theta,
                          perimeterptsV, cellsize_m, nominalvel_mpersecs, timetoturn45degsinplace_secs, obsthresh,
-                         sMotPrimFile, use_full_footprint_cost);
+                         sMotPrimFile, use_full_footprint_cost, allow_start_collision);
 }
 
 bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const unsigned char* mapdata, double startx,
@@ -1606,7 +1607,8 @@ bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const un
                                                  double cellsize_m, double nominalvel_mpersecs,
                                                  double timetoturn45degsinplace_secs, unsigned char obsthresh,
                                                  const char* sMotPrimFile,
-                                                 bool use_full_footprint_cost)
+                                                 bool use_full_footprint_cost,
+                                                 bool allow_start_collision)
 {
     SBPL_PRINTF("env: initialize with width=%d height=%d start=%.3f %.3f %.3f "
                 "goalx=%.3f %.3f %.3f cellsize=%.3f nomvel=%.3f timetoturn=%.3f, obsthresh=%d\n",
@@ -1623,6 +1625,7 @@ bool EnvironmentNAVXYTHETALATTICE::InitializeEnv(int width, int height, const un
 
     EnvNAVXYTHETALATCfg.obsthresh = obsthresh;
     use_full_footprint_cost_ = use_full_footprint_cost;
+    allow_start_collision_ = allow_start_collision;
 
     //TODO - need to set the tolerance as well
 
@@ -2103,6 +2106,7 @@ int EnvironmentNAVXYTHETALAT::SetStart(double x_m, double y_m, double theta_rad)
 
     if (!IsValidConfiguration(x, y, theta)) {
         SBPL_ERROR("ERROR: start configuration %d %d %d is invalid (crashing against obstacles)\n", x, y, theta);
+        if (!allow_start_collision_) return -1;
     }
 
     EnvNAVXYTHETALATHashEntry_t* OutHashEntry;

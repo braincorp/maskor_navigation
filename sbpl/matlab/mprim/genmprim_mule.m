@@ -29,9 +29,10 @@
 function[] = genmprim_mule(outfilename)
 
 %
-%generates motion primitives and saves them into file
+% generates motion primitives for a mule-like vehicle
+% (allowing turning in place) and saves them into file
 %
-%written by Maxim Likhachev
+% Based on Maxim Likhachev's code
 %---------------------------------------------------
 %
 

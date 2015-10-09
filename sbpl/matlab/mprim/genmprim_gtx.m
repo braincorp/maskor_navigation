@@ -29,9 +29,10 @@
 function[] = genmprim_gtx(outfilename)
 
 %
-%generates motion primitives and saves them into file
+% generates motion primitives for a gtx-like vehicle
+% (no turning in place) and saves them into file
 %
-%written by Maxim Likhachev
+% based on Maxim Likhachev's code
 %---------------------------------------------------
 %
 

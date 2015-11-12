@@ -434,26 +434,30 @@ int ARAPlanner::ImprovePath(ARASearchStateSpace_t* pSearchStateSpace, double Max
         }
 
         if (expands % 100000 == 0 && expands > 0) {
-            SBPL_PRINTF("expands so far=%u\n", expands);
+            SBPL_PRINTALL(SBPL_LEVEL_INFO, "expands so far=%u\n", expands);
         }
+    }
+
+    if (minkey.key[0] > INFINITECOST) {
+        SBPL_PRINTALL(SBPL_LEVEL_ERROR, "ERROR in ImprovePath: cost overflow\n");
     }
 
     int retv = 1;
     if (searchgoalstate->g == INFINITECOST && pSearchStateSpace->heap->emptyheap()) {
-        SBPL_PRINTF("solution does not exist: search exited because heap is empty\n");
+        SBPL_PRINTALL(SBPL_LEVEL_INFO, "solution does not exist: search exited because heap is empty\n");
         retv = 0;
     }
     else if (!pSearchStateSpace->heap->emptyheap() && goalkey > minkey) {
-        SBPL_PRINTF("search exited because it ran out of time\n");
+        SBPL_PRINTALL(SBPL_LEVEL_INFO, "search exited because it ran out of time\n");
         retv = 2;
     }
     else if (searchgoalstate->g == INFINITECOST && !pSearchStateSpace->heap->emptyheap()) {
-        SBPL_PRINTF("solution does not exist: search exited because all candidates for expansion have "
+        SBPL_PRINTALL(SBPL_LEVEL_INFO, "solution does not exist: search exited because all candidates for expansion have "
                     "infinite heuristics\n");
         retv = 0;
     }
     else {
-        SBPL_PRINTF("search exited with a solution for eps=%.3f\n", pSearchStateSpace->eps);
+        SBPL_PRINTALL(SBPL_LEVEL_INFO, "search exited with a solution for eps=%.3f\n", pSearchStateSpace->eps);
         retv = 1;
     }
 

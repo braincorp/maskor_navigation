@@ -1126,7 +1126,7 @@ int ARAPlanner::replan(double allocated_time_secs, vector<int>* solution_stateID
 
 int ARAPlanner::set_goal(int goal_stateID)
 {
-    std::cout << std::endl << "setting goal for ara* : Id " << goal_stateID << std::endl;
+    // std::cout << std::endl << "setting goal for ara* : Id " << goal_stateID << std::endl;
 
     SBPL_PRINTF("planner: setting goal to %d\n", goal_stateID);
     environment_->PrintState(goal_stateID, true, stdout);
@@ -1135,7 +1135,7 @@ int ARAPlanner::set_goal(int goal_stateID)
         _goalsID.push_back(goal_stateID);
     }
 
-    std::cout << "_goalsID.size() : " << _goalsID.size() << std::endl;
+    // std::cout << "_goalsID.size() : " << _goalsID.size() << std::endl;
 
     if (bforwardsearch) {
         if (SetSearchGoalState(goal_stateID, pSearchStateSpace_) != 1) {

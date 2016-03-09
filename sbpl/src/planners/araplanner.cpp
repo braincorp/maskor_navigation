@@ -303,11 +303,9 @@ void ARAPlanner::UpdateSuccs(ARAState* state, ARASearchStateSpace_t* pSearchStat
     environment_->GetSuccs(state->MDPstate->StateID, &SuccIDV, &CostV);
 
     if ( _track_compute == 0 && _goal_found==false) {
-        //std::cout << "SuccIDV.size() & _goalsID.size() : "<< SuccIDV.size() <<" & "<< _goalsID.size() << std::endl;
         for (int sind = 0; sind < (int)SuccIDV.size(); sind++) {
             for (int k=0;k<_goalsID.size();k++) {
                 if ( _goalsID[k] == SuccIDV[sind] ) {
-                    std::cout << "goal found : indice "<< k << std::endl;
                     _goal_found=true;
                     set_goal(_goalsID[k]);
                     ARAState* searchgoalstate = (ARAState*)(pSearchStateSpace->searchgoalstate->PlannerSpecificData);
@@ -1126,16 +1124,12 @@ int ARAPlanner::replan(double allocated_time_secs, vector<int>* solution_stateID
 
 int ARAPlanner::set_goal(int goal_stateID)
 {
-    // std::cout << std::endl << "setting goal for ara* : Id " << goal_stateID << std::endl;
-
     SBPL_PRINTF("planner: setting goal to %d\n", goal_stateID);
     environment_->PrintState(goal_stateID, true, stdout);
 
     if (_start_search == false ) {
         _goalsID.push_back(goal_stateID);
     }
-
-    // std::cout << "_goalsID.size() : " << _goalsID.size() << std::endl;
 
     if (bforwardsearch) {
         if (SetSearchGoalState(goal_stateID, pSearchStateSpace_) != 1) {
@@ -1188,7 +1182,6 @@ void ARAPlanner::costs_changed()
 
 int ARAPlanner::force_planning_from_scratch()
 {
-    std::cout << std::endl << "planner: forceplanfromscratch set " << std::endl;
     SBPL_PRINTF("planner: forceplanfromscratch set\n");
 
     _goalsID.clear();
@@ -1203,7 +1196,6 @@ int ARAPlanner::force_planning_from_scratch()
 
 int ARAPlanner::force_planning_from_scratch_and_free_memory()
 {
-    std::cout << std::endl << "planner: force_planning_from_scratch_and_free_memory set " << std::endl;
     SBPL_PRINTF("planner: force_planning_from_scratch_and_free_memory set\n");
 
     _goalsID.clear();
